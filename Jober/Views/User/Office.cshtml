@@ -1,0 +1,18 @@
+﻿@model Jober.Models.UserViewModels.WorkerPageViewModel
+@{
+    ViewData["Title"] = "Кабинет";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span id="j-office-data" data-guid="@Model.UserId" data-worker_id="@Model.WorkerId"></span>
+<ul class="nav nav-tabs nav-justified" id="j-office-nav">
+    <li data-action="workerneworders" role="presentation" class="active"><a href="#">Новые</a></li>
+    <li data-action="workerorders" role="presentation"><a href="#">В работе</a></li>
+    <li data-action="workersettings" role="presentation"><a href="#">Настройки</a></li>
+</ul>
+<div id="j-office-content">
+    @{await Html.RenderPartialAsync("_WorkerNewOrdersListPartial", Model);}
+</div>
+
+@section Scripts {
+    <script src="~/js/scriptOfficeLogic.js" asp-append-version="true"></script>
+}

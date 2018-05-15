@@ -1,0 +1,25 @@
+﻿@model Jober.Models.UserViewModels.UserPageViewModel
+
+
+<div id="j-account-setting" data-action="indexwrite"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></div>
+<div class="form-group">
+    <label asp-for="Email"></label>
+    <span class="form-control j-account-info">@Model.Email</span>
+    @if (!Model.IsEmailConfirmed)
+    {
+        <span style="color:red">не подтверждена</span>
+    }
+    
+</div>
+<div class="form-group">
+    <label asp-for="Name"></label>
+    <span class="form-control j-account-info">@Model.Name</span>
+</div>
+<div class="form-group">
+    <label asp-for="City"></label><span asp-validation-for="CityId"></span>
+    <span class="form-control j-account-info">@Model.City</span>
+</div>
+<div class="form-group">
+    <label asp-for="PhoneNumber"></label><span asp-validation-for="PhoneNumber"></span>
+    <span class="form-control j-account-info">@Model.PhoneNumber</span>
+</div>

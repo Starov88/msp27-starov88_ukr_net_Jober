@@ -1,0 +1,25 @@
+﻿@*@model IEnumerable<Jober.Models.Category>
+
+@{
+    ViewData["Title"] = "About";
+}
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-2">
+        @await Component.InvokeAsync("Menu")
+    </div>
+    <div class="col-md-8 j-body-content">
+        <label>Доступные сервисы</label>
+        <ul class="list-group">
+            @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                <input type="checkbox" name="services" value="@item.Id" />
+                <span class="j-order-services">@item.Name</span>
+            </li>
+    }
+        </ul>
+    </div>
+    <div class="col-md-2"></div>
+</div>*@
+

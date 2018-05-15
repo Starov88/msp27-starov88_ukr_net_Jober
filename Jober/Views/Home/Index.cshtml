@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Jober.Models.Category>
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Главная";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData.ContainsKey("categoryId"))
+{
+<div id="j-flex-grid">
+    @foreach (var item in Model)
+    {
+        string imgPath = item.ImgFilePath ?? $"/images/icons/electrik.png";
+        <div>
+            <a asp-controller="Home" asp-action="Order" asp-route-category="@item.Id.ToString()" class="j-category-item j-sub-category"><img src="@imgPath"><br /><span>@item.Name</span></a>
+        </div>
+    }
+    <a class="j-back-to-menu" data-category_id="0"><span class="glyphicon glyphicon-arrow-left" aria-hidden='true'></span></a>
+</div>
+
+}
+else
+{
+    <div id="j-flex-grid">
+    @foreach (var item in Model)
+    {
+        string imgPath = item.ImgFilePath ?? $"/images/icons/electrik.png";
+        <div>
+            <a class="j-category-item" data-category_id="@item.Id"><img src="@imgPath"><br /><span>@item.Name</span></a>
+        </div>
+    }
+    </div>
+}

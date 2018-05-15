@@ -1,0 +1,76 @@
+﻿@model Jober.Models.UserViewModels.WorkerPageViewModel
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#j-woker-office-nav" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Фильтры:</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="j-woker-office-nav">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" id="j-filter-category" data-id="0" class="dropdown-toggle j-filter" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Все категории <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-id="0">Все категории </a></li>
+                        <li role="separator" class="divider"></li>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <li><a href="#" data-id="@item.Id">@item.Name </a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" id="j-filter-district" data-id="0" class="dropdown-toggle j-filter" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Все районы <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-id="0">Все районы</a></li>
+                        <li role="separator" class="divider"></li>
+                        @foreach (var item in Model.Districts)
+                        {
+                            <li><a href="#" data-id="@item.Id">@item.Name </a></li>
+                        }
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" id="j-filter-sort" data-id="date" class="dropdown-toggle j-filter" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Сортировка по дате <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a data-id="date" href="#">Сортировка по дате </a></li>
+                        <li><a data-id="sum" href="#">Сортировка по сумме </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="j-office-flex-grid">
+    @foreach (var item in Model.OrdersInWork)
+    {
+        <div data-district_id="@item.Location.DistrictId" data-category_id="@item.CategoryId" data-date="@item.Date.Ticks" data-sum="@item.TotalCost">
+            <div class="panel panel-default" data-order_id="@item.Id">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Заказ №@item.Id</h3>
+                    <p><span class="label label-info">@item.Location.District.Name</span></p>
+                    <p>@item.Date.ToShortDateString() c @item.Date.ToShortTimeString() до @item.Date.AddHours(1).ToShortTimeString()<br />@item.Location.Address<br /> тел. @item.User.PhoneNumber<br />@item.User.UserName</p>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        @foreach (var serv in item.OrderDetails)
+                        {
+                            <li>@serv.Service.Name x @serv.Quantity</li>
+                        }
+                    </ul>
+                    <p>@item.Description</p>
+                </div>
+                <div class="panel-footer">
+                    <label>@item.TotalCost грн.</label>
+                    <button class="btn j-bg-red j-revokeorder-btn" href="#">Отклонить</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

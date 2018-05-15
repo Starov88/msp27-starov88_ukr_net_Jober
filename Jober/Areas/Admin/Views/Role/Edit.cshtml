@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Jober.Models.AdminViewModels.ChangeRoleViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Изменение ролей для пользователя @Model.UserEmail</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+    <div class="form-group">
+        @foreach (IdentityRole role in Model.AllRoles)
+        {
+            <input type="checkbox" @(Model.UserRoles.Contains(role.Name) ? "checked" : "") name="roles" value="@role.Name"/>@role.Name <br />
+        }
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>

@@ -1,0 +1,19 @@
+﻿@model Jober.Models.UserViewModels.UserPageViewModel
+@{
+    ViewData["Title"] = "Аккаунт";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6 hidden-sm hidden-xs j-account-img"><img src="~/images/logos/ava.jpg" /></div>
+    <div class="col-md-6" id="j-account-form">
+        @{await Html.RenderPartialAsync("_UserWritePartial", Model);}
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/ScriptUserAccountLogic.js" asp-append-version="true"></script>
+}

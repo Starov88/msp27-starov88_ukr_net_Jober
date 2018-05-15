@@ -1,0 +1,150 @@
+﻿@model Jober.Models.HomeViewModels.OrderViewModel
+
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Заказ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @if (@Model != null)
+    {
+        <form asp-controller="Home" asp-action="Order" asp-antiforgery="true" id="j-order-form">
+            <div class="col-md-6">
+                <input type="hidden" name="UserId" value="@UserManager.GetUserId(User)" />
+                <input type="hidden" name="SelectedCategoryId" value="@Model.SelectedCategoryId" />
+                <input type="hidden" name="SelectedCategoryName" value="@Model.SelectedCategoryName" />
+                <div class="form-group">
+                    <label asp-for="@Model.ServiceIds"></label><span asp-validation-for="ServiceIds"></span>
+                    <ul id="j-services" class="list-group">
+                        @foreach (var item in Model.Services)
+                        {
+                            <li class="list-group-item">
+                            @if (Model.ServiceIds?.Contains(item.Id) == true)
+                            {
+                                <input type="checkbox" checked="checked" name="ServiceIds" data-price="@item.Price" value="@item.Id" />
+                                <select class="j-service-quantity" name="QuantityString">
+                                @for (int i = 1; i < 10; i++)
+                                {
+                                    string val = $"{item.Id}-{i}";
+                                    if (Model.Quantity?.ContainsKey(item.Id) == true && Model.Quantity[item.Id] == i)
+                                    {
+                                        <option selected="selected" value="@val">@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@val">@i</option>
+                                    }
+                                }
+                                </select>
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="ServiceIds" data-price="@item.Price" value="@item.Id" />
+                                <select class="j-hidden j-service-quantity" name="QuantityString">
+                                @for (int i = 1; i < 10; i++)
+                                {
+                                    string val = $"{item.Id}-{i}";
+                                    <option value="@val">@i</option>
+                                }
+                                </select>
+                            }
+                            <span class="j-order-services">@item.Name</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="City"></label>
+                    <input class="form-control" type="text" value="@Model.City.Name" disabled="disabled" required />
+                    <input class="form-control" type="hidden" name="CityId" value="@Model.City.Id" required />
+                </div>
+                <div class="form-group">
+                    <label>Район</label><span asp-validation-for="DistrictId"></span>
+                    <select class="form-control" name="DistrictId">
+                        @if (Model.DistrictId > 0)
+                        {
+                            foreach (var item in @Model.City.Districts)
+                            {
+                                if (Model.DistrictId == item.Id)
+                                {
+                                    <option selected="selected" value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <option selected="selected" disabled="disabled" value="0">Выберите район</option>
+                            foreach (var item in @Model.City.Districts)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address"></label><span asp-validation-for="Address"></span>
+                    <input class="form-control" type="text" name="Address" value="@Model.Address" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date"></label><span asp-validation-for="Date"></span>
+                    @if (false)
+                    {
+                        <input class="form-control" type="date" name="Date" value="@Model.Date.ToShortDateString()"/>
+                    }
+                    else
+                    {
+                        <input class="form-control" type="date" name="Date" />
+                    }
+                </div>
+                <div class="form-group">
+                    <label asp-for="Time"></label><span asp-validation-for="Time"></span>
+                    <select class="form-control" name="Time">
+                        @if (Model.Time == default(int))
+                        {
+                            <option selected="selected" disabled="disabled">Выберите удобное время</option>
+                            @for (var i = 6; i < 22; i++)
+                            {
+                                <option value="@i">@i:00 - @(i + 1):00</option>
+                            }
+                        }
+                        else
+                        {
+                            @for (var i = 6; i < 22; i++)
+                            {
+                                if (i == Model.Time)
+                                {
+                                    <option selected="selected" value="@i">@i:00 - @(i + 1):00</option>
+                                }
+                                else
+                                {
+                                    <option value="@i">@i:00 - @(i + 1):00</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description"></label><span asp-validation-for="Description"></span>
+                    <textarea asp-for="Description" class="form-control" id="j-description" maxlength="1000" value="@Model.Description" placeholder="При необходимости укажите особенности заказа"></textarea>
+                </div>
+                <div class="form-group">
+                    <label id="j-totalcost"></label>
+                    <input id="j-order-submit" class="btn btn-default" type="submit" value="Заказ" />
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <p>HELLO</p>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/scriptOrderLogic.js" asp-append-version="true"></script>
+}

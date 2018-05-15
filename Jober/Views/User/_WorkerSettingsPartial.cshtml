@@ -1,0 +1,53 @@
+﻿@model Jober.Models.UserViewModels.WorkerPageViewModel
+
+<div class="jumbotron">
+    <h3>Настройки отображения заказов</h3>
+    <p>Выбрав районы города и категории услуг, Вы зададите фильтр для получения уведомлений о новых заказах.</br>
+       Все новые заказы с учетом сделанного выбора будут отображаться на вкладке <a href="#" data-action="workerneworders">"Новые"</a>.
+    </p>
+    <p><button class="btn j-bg-green" id="j-savesettings-btn">Сохранить</button></p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <p id="j-worker-city" data-city_id="@Model.City.Id">@Model.City.Name</p>
+        <label>Районы</label>
+        <ul class="list-group">
+            @foreach (var item in Model.City.Districts)
+            {
+                if (Model.WorkerSetting.DistrictIds.Contains(item.Id))
+                {
+                    <li class="list-group-item"><input type="checkbox" checked="checked" name="districtIds" value="@item.Id"> @item.Name</li>
+                }
+                else
+                {
+                    <li class="list-group-item"><input type="checkbox" name="districtIds" value="@item.Id"> @item.Name</li>
+                }
+            }
+        </ul>
+        
+    </div>
+    <div class="col-md-6">
+        <ul id="j-setting-category" class="nav nav-pills nav-stacked">
+            @foreach (var item in Model.Categories.Where(c => c.ParentId == null))
+            {
+                <li class="j-office-categorysetting"><a>@item.Name</a></li>
+                <ul class="list-group hidden">
+                    @foreach (var subItem in Model.Categories.Where(c => c.ParentId == item.Id))
+                    {
+                        if (Model.WorkerSetting.CategoryIds.Contains(subItem.Id))
+                        {
+                            <li class="list-group-item"><input type="checkbox" checked="checked" name="categoryIds" value="@subItem.Id"> @subItem.Name</li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item"><input type="checkbox" name="categoryIds" value="@subItem.Id"> @subItem.Name</li>
+                        }
+                    }
+                </ul>
+            }
+
+        </ul>
+    </div>
+    
+</div>

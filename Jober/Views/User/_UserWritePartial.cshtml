@@ -1,0 +1,34 @@
+﻿@model Jober.Models.UserViewModels.UserPageViewModel
+
+<div id="j-account-setting"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></div>
+<form asp-controller="User" method="post" asp-action="SaveUser" asp-antiforgery="true" id="j-order-form">
+    <div class="form-group">
+        <label asp-for="Email"></label><span asp-validation-for="Email"></span>
+        <input class="form-control" asp-for="Email" value="@Model.Email" readonly required />
+        @if (!Model.IsEmailConfirmed)
+        {
+            <span style="color:red">не подтверждена</span>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="Name"></label><span asp-validation-for="Name"></span>
+        <input class="form-control" asp-for="Name" value="@Model.Name" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="City"></label><span asp-validation-for="CityId"></span>
+        <select class="form-control" name="CityId" required>
+            <option selected="selected" value="@Model.CityId">@Model.City</option>
+            @foreach (var item in Model.Cities.Where(c => c.Id != Model.CityId).OrderBy(c => c.Name))
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label><span asp-validation-for="PhoneNumber"></span>
+        <input class="form-control" asp-for="PhoneNumber" value="@Model.PhoneNumber" required />
+    </div>
+    <div class="form-group">
+        <input id="j-account-submit" class="btn btn-default j-bg-green" type="submit" value="Сохранить" />
+    </div>
+</form>
